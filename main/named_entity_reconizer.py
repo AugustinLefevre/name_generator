@@ -1,7 +1,7 @@
 import spacy
 
 class named_entity_reconizer:
-    nlpFr = spacy.load("fr_core_news_sm")
+    nlpFr = spacy.load("fr_core_news_lg")
     firstNames = []
     lastNames = []
     locations = []
@@ -20,20 +20,20 @@ class named_entity_reconizer:
                     self.locations.append(entity.text)
             elif entity.label_ == "PER" : 
                 elements = entity.text.split()
-                if elements[0] not in self.firstNames:
+                if elements[0] not in self.firstNames and elements[0][0].isupper() and len(elements[0]) > 2:
                     print("firstname : " + elements[0])
                     self.firstNames.append(elements[0])
                 if len(elements) > 1 :
                     lastnameElements = elements[1:]
                     lastname = ' '.join(lastnameElements)
-                    if lastname not in self.lastNames : 
+                    if lastname not in self.lastNames and lastname[0].isupper() and len(lastname) > 2: 
                         print("lastname : " + lastname)
                         self.lastNames.append(lastname)
     
-    def getFistNames(self) :
+    def getFirstnames(self) :
         return self.firstNames
     
-    def getLastNames(self) :
+    def getLastnames(self) :
         return self.lastNames
     
     def getLocations(self) :

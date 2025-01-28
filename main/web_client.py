@@ -8,7 +8,6 @@ import gzip
 class web_client():
     header = ""
     url = ""
-    response = ""
 
     def set_header(self, header):
         self.header = header
@@ -17,18 +16,17 @@ class web_client():
     def set_url(self, url):
         self.url = url
         return self
-
-    def send_get_request(self):
-        self.response = requests.get(self.url, headers=self.header)
-        return self
     
     def get_response(self):
+        
+        self.response = requests.get(self.url, headers=self.header)
         return self.response
     
     def is_compressed(self, content_encoding):
         return content_encoding in ['br', 'gzip', 'deflate']
     
     def get_content(self):
+        self.response = requests.get(self.url, headers=self.header)
         if self.response.status_code != 200:
             print(f"\033[91m Error {self.response.status_code} request {self.url}\033[00m")
 

@@ -2,11 +2,12 @@
 import os
 
 from urllib.parse import urlparse, urljoin
-from main.web_client import web_client
+from web_client import web_client
 from bs4 import BeautifulSoup
 
 class web_scrapper:
-    def __init__(self):
+    def __init__(self, url):
+        self.url = url
         self.visited_links = set()
         self.limit = 100
         self.web_client = web_client()
@@ -37,10 +38,10 @@ class web_scrapper:
             print(f"Error fetching texts from {url}: {e}")
             return ""
 
-    def get_links(self, url):
+    def get_links(self):
         
         try:
-            html = self.web_client.set_url(url).get_content()
+            html = self.web_client.set_url(self.url).get_content()
             soup = BeautifulSoup(html, "html.parser")
             
             extracted_links = []
@@ -52,19 +53,28 @@ class web_scrapper:
                 for element in elements:
                     href = element.get('href')
                     if href:
-                        full_url = urljoin(url, href)
-                        if url in full_url:
+                        full_url = urljoin(self.url, href)
+                        if self.url in full_url:
                             extracted_links.append(full_url)
             return extracted_links
         except Exception as e:
-            print(f"\033[91m Error fetching links from {url}: {e}\033[00m")
+            print(f"\033[91m Error fetching links from {self.url}: {e}\033[00m")
             return []
 
     def scan_site_map(self, url):
-        links = self.get_links(url)
+        links = self.get_links()
         for link in links:
             if self.limit > len(self.visited_links) and link not in self.visited_links:
                 print(f"\033[92m {link}\033[00m")
                 self.visited_links.add(link)
-                self.scan_site_map(link)
+                self.scan_site_map(url)
         return list(self.visited_links)
+    
+    def scrap_texts(self):
+        urls = self.scan_site_map(self.url)
+        texts = []
+
+        for url in urls:
+            texts.append(self.get_texts(url))
+
+        return texts

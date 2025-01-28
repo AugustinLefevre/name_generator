@@ -6,7 +6,7 @@ import unittest
 import os
 
 class test_web_scrapper(unittest.TestCase):
-    ws = web_scrapper()
+    ws = web_scrapper("https://www.test.com")
     script_dir = os.path.dirname(__file__)
 
     def test_getTexts(self):
@@ -14,8 +14,7 @@ class test_web_scrapper(unittest.TestCase):
         given_file = open(given_file_path, "r")
         content = given_file.read()
         self.ws.web_client.get_content = MagicMock(return_value=content)
-        url = "https://www.test.com"
-        actual = self.ws.get_texts(url)
+        actual = self.ws.get_texts()
 
         expected_file_path = os.path.join(self.script_dir, "ressources", "texte_exemple.txt")
         expected_file = open(expected_file_path, "r")
@@ -34,8 +33,7 @@ class test_web_scrapper(unittest.TestCase):
         given_file = open(given_file_path, "r")
         content = given_file.read()
         self.ws.web_client.get_content = MagicMock(return_value=content)
-        url = "https://www.test.com"
-        actual = self.ws.get_links(url)
+        actual = self.ws.get_links()
 
         expected = ['https://www.test.com/astu/index.php', 
                     'https://www.test.com/astu/internet/index.php', 
@@ -56,8 +54,7 @@ class test_web_scrapper(unittest.TestCase):
                     'https://www.test.com/tuto/compression/index.php',]
         self.ws.get_links = MagicMock(return_value=given)
 
-        url = "https://www.test.com"
-        actual = self.ws.scan_site_map(url)
+        actual = self.ws.scan_site_map()
 
         self.assertTrue('https://www.test.com/tuto/compression/index.php' in actual)
         self.assertTrue('https://www.test.com/astu/internet/index.php' in actual)
