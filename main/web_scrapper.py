@@ -9,7 +9,7 @@ class web_scrapper:
     def __init__(self, url):
         self.url = url
         self.visited_links = set()
-        self.limit = 100
+        self.limit = 1000
         self.web_client = web_client()
         self.web_client.set_header({
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
@@ -19,7 +19,7 @@ class web_scrapper:
                 'Connection': 'keep-alive'
             })
 
-    def get_texts(self, url, tags=['p', 'div']):
+    def get_texts(self, url, tags=['p']):
         try:
             
             html = self.web_client.set_url(url).get_content()
@@ -32,8 +32,8 @@ class web_scrapper:
                 for element in elements:
                     extracted_text.append(element.get_text())
 
-            final_text = "\n".join(extracted_text)
-            return final_text
+            final_text = " ".join(extracted_text)
+            return extracted_text
         except Exception as e:
             print(f"Error fetching texts from {url}: {e}")
             return ""
@@ -75,6 +75,5 @@ class web_scrapper:
         texts = []
 
         for url in urls:
-            texts.append(self.get_texts(url))
-
+            texts = texts + self.get_texts(url)
         return texts
