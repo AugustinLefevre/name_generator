@@ -1,4 +1,4 @@
-from main.web_client import web_client
+from main.web_scrapper.web_client import web_client
 import unittest
 
 class test_web_client(unittest.TestCase):
@@ -7,7 +7,7 @@ class test_web_client(unittest.TestCase):
 
     def test_get_request(self):
         url = "https://www.larousse.fr/dictionnaires/francais/test/77497"
-        response = self.wc.set_url(url).send_get_request().get_response()
+        response = self.wc.set_url(url).get_response()
         self.assertEqual(200, response.status_code)
         self.assertIsNotNone(self.wc.get_content())
 

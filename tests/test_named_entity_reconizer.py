@@ -10,7 +10,7 @@ class test_named_entity_reconizer(unittest.TestCase):
         given = "Emmanuel Macron est le président de la France mange des banane."
 
         self.ner.parseText(given)
-        actualFirstnames = self.ner.getFirstNnmes()
+        actualFirstnames = self.ner.getFirstnames()
         actualLastnames = self.ner.getLastnames()
         actualLocations = self.ner.getLocations()
 

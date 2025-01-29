@@ -5,15 +5,12 @@ import os
 
 class test_NER_CVS_storage(unittest.TestCase):
     
-    outputFile = "target/testStorageFile.csv"
-    storage = NER_CSV_storage(outputFile)
-
-
     def teststorage(self):
-
-        if os.path.exists(self.outputFile):
-            os.remove(self.outputFile)
-        with open(self.outputFile, mode="w", newline="", encoding="utf-8") as csvfile:
+        outputFile = "target/testStorageFile.csv"
+        storage = NER_CSV_storage(outputFile)
+        if os.path.exists(outputFile):
+            os.remove(outputFile)
+        with open(outputFile, mode="w", newline="", encoding="utf-8") as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(["firstname", "lastname", "location"])
 
@@ -21,7 +18,7 @@ class test_NER_CVS_storage(unittest.TestCase):
         column_lastname = []
         column_location = []
 
-        with open(self.outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
+        with open(outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile) 
             for row in reader:
                 if(row["firstname"] != ""):
@@ -40,9 +37,9 @@ class test_NER_CVS_storage(unittest.TestCase):
         givenLastname = ["patati", "patata"]
         givenLocation = ["Paris"]
 
-        self.storage.storeEntities(givenFirstname, givenLastname, givenLocation)
+        storage.storeEntities(givenFirstname, givenLastname, givenLocation)
 
-        with open(self.outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
+        with open(outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile) 
             for row in reader:
                 if(row["firstname"] != ""):
@@ -68,9 +65,9 @@ class test_NER_CVS_storage(unittest.TestCase):
         givenLastname = ["test1", "test5"]
         givenLocation = ["Paris", "Moscou"]
 
-        self.storage.storeEntities(givenFirstname, givenLastname, givenLocation)
+        storage.storeEntities(givenFirstname, givenLastname, givenLocation)
 
-        with open(self.outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
+        with open(outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile) 
             for row in reader:
                 if(row["firstname"] != ""):
@@ -87,6 +84,56 @@ class test_NER_CVS_storage(unittest.TestCase):
         self.assertEqual(['titi', 'toto', 'tutu', 'tonton'], column_firstname)
         self.assertEqual(['patati', 'patata', 'test1', 'test5'], column_lastname)
         self.assertEqual(['Paris', 'Moscou'], column_location)
+
+    def testoccurencestorage(self):
+        occurence_output_file = "target/testFirstnameOccurrence.csv"
+        storage = NER_CSV_storage(occurence_output_file)
+        if os.path.exists(occurence_output_file):
+            os.remove(occurence_output_file)
+        with open(occurence_output_file, mode="w", newline="", encoding="utf-8") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["firstname", "occurrence"])
+
+        firstnames_occurrences = {}
+
+        with open(occurence_output_file, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                    firstnames_occurrences[row["firstname"]] = row["occurrence"]
+        
+        
+        self.assertEqual(0, len(firstnames_occurrences))
+
+        givenFirstname = ["titi", "toto", "tutu", "toto"]
+
+        storage.storeFirstnameOcurence(givenFirstname)
+
+        with open(occurence_output_file, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                firstnames_occurrences[row["firstname"]] = row["occurrence"]
+
+        self.assertEqual(3, len(firstnames_occurrences))
+
+        self.assertEqual(firstnames_occurrences["titi"], '1')
+        self.assertEqual(firstnames_occurrences["toto"],'2')
+        self.assertEqual(firstnames_occurrences["tutu"],'1')
+
+        givenFirstname = ["tonton", "toto"]
+
+        storage.storeFirstnameOcurence(givenFirstname)
+
+        with open(occurence_output_file, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                firstnames_occurrences[row["firstname"]] = row["occurrence"]
+
+        self.assertEqual(4, len(firstnames_occurrences))
+
+        self.assertEqual(firstnames_occurrences["titi"], '1')
+        self.assertEqual(firstnames_occurrences["toto"], '3')
+        self.assertEqual(firstnames_occurrences["tutu"], '1')
+        self.assertEqual(firstnames_occurrences["tonton"], '1')
         
 
 if __name__ == '__main__':

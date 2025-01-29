@@ -45,6 +45,28 @@ class NER_CSV_storage :
             for first, last, loc in zip(column_firstname, column_lastname, column_location):
                 writer.writerow([first, last, loc])
 
+    def storeFirstnameOcurence(self, firstnames):
+        firstnames_occurrences = {}
+
+        with open(self.outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                firstnames_occurrences[row["firstname"]] = row["occurrence"]
+
+        for firstname in firstnames:
+            if firstname not in firstnames_occurrences:
+                firstnames_occurrences[firstname] = 1
+            else:
+                firstnames_occurrences[firstname] = int(firstnames_occurrences[firstname]) + 1
+
+        with open(self.outputFile, mode="w", newline="", encoding="utf-8") as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["firstname", "occurrence"])
+
+            for firstname, occurence in firstnames_occurrences.items():
+                writer.writerow([firstname, occurence])
+
+
 
         
 

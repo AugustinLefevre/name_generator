@@ -2,7 +2,7 @@
 import os
 
 from urllib.parse import urlparse, urljoin
-from web_client import web_client
+from web_scrapper.web_client import web_client
 from bs4 import BeautifulSoup
 
 class web_scrapper:
