@@ -26,9 +26,10 @@ class test_named_entity_reconizer(unittest.TestCase):
         actualLastnames = self.ner.getLastnames()
         actualLocations = self.ner.getLocations()
 
-        self.assertEqual("Jean-Claude", actualFirstnames[0])
+        self.assertEqual("Jean", actualFirstnames[0])
+        self.assertEqual("Claude", actualFirstnames[1])
         self.assertEqual("Van Damme", actualLastnames[0])
-        self.assertEqual("Catherine", actualFirstnames[1])
+        self.assertEqual("Catherine", actualFirstnames[2])
         self.assertEqual("Deneuve", actualLastnames[1])
         self.assertEqual([], actualLocations)
 
@@ -64,6 +65,12 @@ class test_named_entity_reconizer(unittest.TestCase):
         self.assertEqual(0, len(actualFirstnames))
         self.assertEqual(0, len(actualLastnames))
         self.assertEqual(0, len(actualLocations))
+
+    def testisAName(self):
+        self.assertTrue(self.ner.is_a_name("Teo"))
+        self.assertFalse(self.ner.is_a_name("T-o"))
+        self.assertFalse(self.ner.is_a_name("The"))
+        self.assertTrue(self.ner.is_a_name("Tim"))
 
 
 if __name__ == '__main__':
