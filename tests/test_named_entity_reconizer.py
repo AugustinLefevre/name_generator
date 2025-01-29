@@ -1,5 +1,5 @@
 
-from main.named_entity_reconizer import named_entity_reconizer
+from named_entity_reconizer.named_entity_reconizer import named_entity_reconizer
 import unittest
 
 class test_named_entity_reconizer(unittest.TestCase):
@@ -42,7 +42,29 @@ class test_named_entity_reconizer(unittest.TestCase):
 
         self.assertEqual("Joe", actualFirstnames[0])
         self.assertEqual("Biden", actualLastnames[0])
-        self.assertEqual("États-Unis", actualLocations[0]) 
+        self.assertEqual("États-Unis", actualLocations[0])
+
+    def testWithProblematicWord(self):
+        given = "Bonjour Madame"
+        self.ner.parseText(given)
+        actualFirstnames = self.ner.getFirstnames()
+        actualLastnames = self.ner.getLastnames()
+        actualLocations = self.ner.getLocations()
+
+        self.assertEqual(0, len(actualFirstnames))
+        self.assertEqual(0, len(actualLastnames))
+        self.assertEqual(0, len(actualLocations))
+
+        given = "Bonjour Monsieur"
+        self.ner.parseText(given)
+        actualFirstnames = self.ner.getFirstnames()
+        actualLastnames = self.ner.getLastnames()
+        actualLocations = self.ner.getLocations()
+
+        self.assertEqual(0, len(actualFirstnames))
+        self.assertEqual(0, len(actualLastnames))
+        self.assertEqual(0, len(actualLocations))
+
 
 if __name__ == '__main__':
     unittest.main()

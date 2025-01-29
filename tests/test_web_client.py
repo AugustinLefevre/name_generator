@@ -1,4 +1,4 @@
-from main.web_scrapper.web_client import web_client
+from web_scrapper.web_client import web_client
 import unittest
 
 class test_web_client(unittest.TestCase):

@@ -6,7 +6,7 @@ class named_entity_reconizer:
     firstNames = []
     lastNames = []
     locations = []
-    articles = {"le", "la", "les", "l'", "un", "une", "des"}
+    exclude = {"Monsieur", "Madame", "Mademoiselle"}
 
     def parseText(self, text) :
         self.firstNames = []
@@ -20,7 +20,7 @@ class named_entity_reconizer:
                     self.locations.append(entity.text)
             elif entity.label_ == "PER" : 
                 elements = entity.text.split()
-                if elements[0] not in self.firstNames and elements[0][0].isupper() and len(elements[0]) > 2 and (re.match('^[a-zA-Z -]*$',elements[0])):
+                if self.is_a_name(elements[0]):
                     print("firstname : " + elements[0])
                     self.firstNames.append(elements[0])
                 if len(elements) > 1 :
@@ -38,3 +38,18 @@ class named_entity_reconizer:
     
     def getLocations(self) :
         return self.locations
+    
+    def is_a_name(self, name):
+        result = False
+        if '-' in name:
+            elements = name.split('-')
+        else:
+            elements = [name]
+        for element in elements:
+            if len(element) > 2:
+                if element[0].isupper() and element[1:].islower():
+                    if element not in self.exclude:
+                        if (re.match('^[a-zA-Z -]*$', element)):
+                            if element not in self.firstNames:
+                                result = True
+        return result

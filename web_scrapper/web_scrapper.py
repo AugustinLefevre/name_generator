@@ -32,11 +32,10 @@ class web_scrapper:
                 for element in elements:
                     extracted_text.append(element.get_text())
 
-            final_text = " ".join(extracted_text)
             return extracted_text
         except Exception as e:
-            print(f"Error fetching texts from {url}: {e}")
-            return ""
+            print(f"\033[91mError fetching texts from {url}: {e}\033[00m")
+            return []
 
     def get_links(self):
         

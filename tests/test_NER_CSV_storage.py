@@ -1,4 +1,4 @@
-from main.NER_CSV_storage import NER_CSV_storage
+from named_entity_reconizer.NER_CSV_storage import NER_CSV_storage
 import unittest
 import csv
 import os

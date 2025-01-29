@@ -1,5 +1,5 @@
 import re
-from main.web_scrapper.web_scrapper import web_scrapper
+from web_scrapper.web_scrapper import web_scrapper
 from unittest.mock import MagicMock
 import unittest
 import os
