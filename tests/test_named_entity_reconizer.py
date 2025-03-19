@@ -67,10 +67,41 @@ class test_named_entity_reconizer(unittest.TestCase):
         self.assertEqual(0, len(actualLocations))
 
     def testisAName(self):
-        self.assertTrue(self.ner.is_a_name("Teo"))
-        self.assertFalse(self.ner.is_a_name("T-o"))
-        self.assertFalse(self.ner.is_a_name("The"))
-        self.assertTrue(self.ner.is_a_name("Tim"))
+        self.assertTrue(self.ner.is_a_name("Teo", ""))
+        self.assertFalse(self.ner.is_a_name("T-o", ""))
+        self.assertFalse(self.ner.is_a_name("The", ""))
+        self.assertTrue(self.ner.is_a_name("Tim", ""))
+
+    def testWithProblematicWord2(self):
+        given = "Le Petit Chose a d’abord été un simple bulletin de l’association "
+        self.ner.parseText(given)
+        actualFirstnames = self.ner.getFirstnames()
+
+        self.assertEqual(0, len(actualFirstnames))
+
+    def testWithProblematicWord3(self):
+        given = "le décès d’une fille du Comte d’Artois3"
+
+        self.ner.parseText(given)
+        actualFirstnames = self.ner.getFirstnames()
+
+        self.assertEqual(0, len(actualFirstnames))
+
+    def testWithProblematicWord4(self):
+        given = "Offrez à votre enfant une aventure magique"
+
+        self.ner.parseText(given)
+        actualFirstnames = self.ner.getFirstnames()
+
+        self.assertEqual(0, len(actualFirstnames))
+
+    def testWithProblematicWord4(self):
+        given = "Allez, Lucas, chante pour nous !"
+        self.ner.parseText(given)
+        actualFirstnames = self.ner.getFirstnames()
+
+        self.assertEqual(1, len(actualFirstnames))
+        self.assertEqual("Lucas", actualFirstnames[0])
 
 
 if __name__ == '__main__':

@@ -105,8 +105,11 @@ class test_NER_CVS_storage(unittest.TestCase):
         self.assertEqual(0, len(firstnames_occurrences))
 
         givenFirstname = ["titi", "toto", "tutu", "toto"]
+        dict_names = {"titi" : "",
+                      "toto" : "",
+                      "tutu" : ""}
 
-        storage.storeFirstnameOcurence(givenFirstname)
+        storage.storeFirstnameOcurence(givenFirstname, dict_names)
 
         with open(occurence_output_file, mode="r", newline="", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile) 
@@ -120,8 +123,9 @@ class test_NER_CVS_storage(unittest.TestCase):
         self.assertEqual(firstnames_occurrences["tutu"],'1')
 
         givenFirstname = ["tonton", "toto"]
+        dict_names["tonton"] = ""
 
-        storage.storeFirstnameOcurence(givenFirstname)
+        storage.storeFirstnameOcurence(givenFirstname, dict_names)
 
         with open(occurence_output_file, mode="r", newline="", encoding="utf-8") as csvfile:
             reader = csv.DictReader(csvfile) 

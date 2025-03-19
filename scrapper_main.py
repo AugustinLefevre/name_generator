@@ -7,7 +7,7 @@ from named_entity_reconizer.NER_CSV_storage import NER_CSV_storage
 
 urls_file_name = "ressources/urls.csv"
 ner = named_entity_reconizer()
-storage = NER_CSV_storage("target/NamedEntities.csv")
+#storage = NER_CSV_storage("target/NamedEntities.csv")
 
 firstname_occurrence_file_name = "target/firstnameOccurrence.csv"
 
@@ -31,5 +31,6 @@ with open(urls_file_name, mode="r", newline="", encoding="utf-8") as csvfile:
                         firstnames = ner.getFirstnames()
                         lastnames = ner.getLastnames()
                         locations = ner.getLocations()
-                        name_occurrence_storage.storeFirstnameOcurence(firstnames)
-                        storage.storeEntities(firstnames, lastnames, locations)
+                        dict_names = ner.get_dict_names()
+                        name_occurrence_storage.storeFirstnameOcurence(firstnames, dict_names)
+                        #storage.storeEntities(firstnames, lastnames, locations)
