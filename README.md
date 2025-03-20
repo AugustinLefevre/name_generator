@@ -1,4 +1,4 @@
-setup env
+## setup env
 python 3.10.6
 pip install -U pip setuptools wheel
 pip install -U spacy
@@ -28,3 +28,5 @@ les nom finaux sont sauvegardé dans le fichier \target\fistnames.csv
 -lister et checker les sites deja parcouru
 
 -rendre l'executions des scripts d'apres parsing automatique
+
+-checker si les noms sont deja enregistre avant la demande de validation

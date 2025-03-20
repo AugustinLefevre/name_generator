@@ -8,7 +8,27 @@ class MonInterface(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(orientation='vertical', **kwargs)
 
-        # Liste des chaînes de caractères
+        # Liste des chaînes des noms enregisté
+        saved_name_file = "target/firstnames.csv"
+
+        self.existings = []
+
+        with open(saved_name_file, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                if(row["firstnames"] != ""):
+                    self.existings.append(row["firstnames"])
+
+        # ajout des mots exclus dans la list de terme existant
+        excluded_file = "ressources/excluded_words.csv"
+
+        with open(excluded_file, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                if(row["excluded"] != ""):
+                    self.existings.append(row["excluded"])
+
+        # Liste des chaînes des noms recupérés
         outputFile = "target/firstnameOccurrence.csv"
 
         self.names = []
@@ -17,7 +37,8 @@ class MonInterface(BoxLayout):
             reader = csv.DictReader(csvfile) 
             for row in reader:
                 if(row["firstname"] != ""):
-                    self.names.append(row["firstname"])
+                    if(row["firstname"] not in self.existings):
+                        self.names.append(row["firstname"])
 
         excluded_words_file = "ressources/excluded_words.csv"
 
