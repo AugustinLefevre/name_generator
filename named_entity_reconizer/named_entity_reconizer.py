@@ -1,5 +1,6 @@
 import re
 import spacy
+import csv
 
 class named_entity_reconizer:
     nlpFr = spacy.load("fr_core_news_lg")

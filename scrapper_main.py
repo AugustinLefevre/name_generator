@@ -20,9 +20,13 @@ with open(firstname_occurrence_file_name, mode="w", newline="", encoding="utf-8"
 name_occurrence_storage = NER_CSV_storage("target/firstnameOccurrence.csv")
 
 with open(urls_file_name, mode="r", newline="", encoding="utf-8") as csvfile:
-            reader = csv.DictReader(csvfile) 
-            for row in reader:
-                url = row["url"]                   
+        reader = csv.DictReader(csvfile) 
+        rows = list(reader)
+
+for row in rows:
+        if (row["already_scanned"] != "true"):
+                row["already_scanned"] = "true"
+                url = row["url"]
                 print(f"url : {url}")
                 texts = web_scrapper(url).scrap_texts()
                         
@@ -34,3 +38,8 @@ with open(urls_file_name, mode="r", newline="", encoding="utf-8") as csvfile:
                         dict_names = ner.get_dict_names()
                         name_occurrence_storage.storeFirstnameOcurence(firstnames, dict_names)
                         #storage.storeEntities(firstnames, lastnames, locations)
+
+with open(urls_file_name, mode="w", newline="", encoding="utf-8") as fichier:
+        writer = csv.DictWriter(fichier, fieldnames=["url", "already_scanned"])
+        writer.writeheader() 
+        writer.writerows(rows)

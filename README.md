@@ -29,4 +29,4 @@ les nom finaux sont sauvegardé dans le fichier \target\fistnames.csv
 
 -rendre l'executions des scripts d'apres parsing automatique
 
--checker si les noms sont deja enregistre avant la demande de validation
+-injecter la dependance de cvs
