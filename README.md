@@ -25,8 +25,6 @@ les nom finaux sont sauvegardé dans le fichier \target\fistnames.csv
 
 ## Evolution a venir:
 
--lister et checker les sites deja parcouru
-
 -rendre l'executions des scripts d'apres parsing automatique
 
--injecter la dependance de cvs
+-inverser la dependance a cvs
