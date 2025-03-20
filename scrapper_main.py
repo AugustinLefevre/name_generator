@@ -1,10 +1,12 @@
 import csv
 import os
 import sys
+from data_access.data_access_csv import data_access_csv
 from web_scrapper.web_scrapper import web_scrapper
 from named_entity_reconizer.named_entity_reconizer import named_entity_reconizer
 from named_entity_reconizer.NER_CSV_storage import NER_CSV_storage
 
+data_access = data_access_csv()
 urls_file_name = "ressources/urls.csv"
 ner = named_entity_reconizer()
 #storage = NER_CSV_storage("target/NamedEntities.csv")
@@ -19,9 +21,7 @@ with open(firstname_occurrence_file_name, mode="w", newline="", encoding="utf-8"
 
 name_occurrence_storage = NER_CSV_storage("target/firstnameOccurrence.csv")
 
-with open(urls_file_name, mode="r", newline="", encoding="utf-8") as csvfile:
-        reader = csv.DictReader(csvfile) 
-        rows = list(reader)
+rows = data_access.get_rows("ressources/urls.csv")
 
 for row in rows:
         if (row["already_scanned"] != "true"):
