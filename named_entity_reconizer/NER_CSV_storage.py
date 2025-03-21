@@ -1,71 +1,29 @@
 import csv
+from data_access.data_access_csv import data_access_csv
 
-# columns 
 class NER_CSV_storage :
     outputFile = ""
+    data_access = data_access_csv()
 
     def __init__(self, outputFileName):
         self.outputFile = outputFileName
 
-    #def storeEntities(self, firstnames, lastnames, locations) :
-    #    column_firstname = []
-    #    column_lastname = []
-    #    column_location = []
-    #
-    #    with open(self.outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
-    #        reader = csv.DictReader(csvfile) 
-    #        for row in reader:
-    #            if(row["firstname"] != ""):
-    #                column_firstname.append(row["firstname"])
-    #            if(row["lastname"] != ""):
-    #                column_lastname.append(row["lastname"])
-    #            if(row["location"] != ""):
-    #                column_location.append(row["location"])
-    #
-    #    for firstname in firstnames:
-    #        if firstname not in column_firstname:
-    #            column_firstname.append(firstname)
-    #    for lastname in lastnames:
-    #        if lastname not in column_lastname:
-    #            column_lastname.append(lastname)
-    #    for location in locations:
-    #        if location not in column_location:
-    #            column_location.append(location)
-    #
-    #    with open(self.outputFile, mode="w", newline="", encoding="utf-8") as csvfile:
-    #        writer = csv.writer(csvfile)
-    #        writer.writerow(["firstname", "lastname", "location"])
-    #
-    #        max_length = max(len(column_firstname), len(column_lastname), len(column_location))
-    #
-    #        column_firstname += [""] * (max_length - len(column_firstname))
-    #        column_lastname += [""] * (max_length - len(column_lastname))
-    #        column_location += [""] * (max_length - len(column_location))
-    #
-    #        for first, last, loc in zip(column_firstname, column_lastname, column_location):
-    #            writer.writerow([first, last, loc])
-
-    def storeFirstnameOcurence(self, firstnames, dict_names):
-        firstnames_occurrences = {}
-
-        with open(self.outputFile, mode="r", newline="", encoding="utf-8") as csvfile:
-            reader = csv.DictReader(csvfile) 
-            for row in reader:
-                firstnames_occurrences[row["firstname"]] = row["occurrence"]
+    def storeFirstnameOcurence(self, firstnames, name_source):
+        firstnames_occurences = self.data_access.get_rows(self.outputFile)
 
         for firstname in firstnames:
-            if firstname not in firstnames_occurrences:
-                firstnames_occurrences[firstname] = 1
-            else:
-                firstnames_occurrences[firstname] = int(firstnames_occurrences[firstname]) + 1
+            found = False
+            for entry in firstnames_occurences:
+                if entry["firstname"] == firstname:
+                    entry["occurrence"] = int(entry["occurrence"]) + 1
+                    entry["source"] = name_source[firstname]
+                    found = True
+                    break
+            if not found:
+                firstnames_occurences.append({"firstname" : firstname, "occurrence" : 1, "source" : name_source[firstname]})
+            
 
-        with open(self.outputFile, mode="w", newline="", encoding="utf-8") as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(["firstname", "occurrence", "source"])
-
-            for firstname, occurence in firstnames_occurrences.items():
-                writer.writerow([firstname, occurence, dict_names[firstname]])
-
+        self.data_access.overwrite(self.outputFile, firstnames_occurences)
 
 
 

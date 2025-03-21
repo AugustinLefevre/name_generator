@@ -27,3 +27,11 @@ class data_access_csv:
         rows = self.get_rows(file_location)
         result = [d[column] for d in rows]
         return result
+    
+    def get_map(self, file_location, key_name, value_name):
+        result = {}
+        with open(file_location, mode="r", newline="", encoding="utf-8") as csvfile:
+            reader = csv.DictReader(csvfile) 
+            for row in reader:
+                result[row[key_name]] = row[value_name]
+        return result

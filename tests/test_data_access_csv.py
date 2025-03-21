@@ -43,5 +43,13 @@ class test_data_access_csv(unittest.TestCase):
         column_lastname = self.data_access.get_column("tests/ressources/data_access_test.csv", "lastname")
         self.assertEqual(["Toto", "Tutu"], column_lastname)
 
+    def test_get_map(self):
+        actual = self.data_access.get_map("tests/ressources/data_access_test.csv", "firstname", "lastname")
+        expected = {
+            "Titi" : "Toto",
+            "Tata" : "Tutu"
+        }
+        self.assertEqual(expected, actual)
+
 if __name__ == '__main__':
     unittest.main()
