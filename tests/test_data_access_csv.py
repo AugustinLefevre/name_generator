@@ -10,7 +10,7 @@ class test_data_access_csv(unittest.TestCase):
     def test_get_rows(self):
         actuals = self.data_access.get_rows("tests/ressources/data_access_test.csv")
 
-        expecteds = [{'firstname': 'Titi', 'lastname': 'Toto'}]
+        expecteds = [{'firstname': 'Titi', 'lastname': 'Toto'}, {'firstname': 'Tata', 'lastname': 'Tutu'}]
 
         self.assertEqual(expecteds, actuals)
 
@@ -36,6 +36,12 @@ class test_data_access_csv(unittest.TestCase):
         self.assertEqual(given, actuals)
 
         os.remove(destination)
+
+    def test_get_column(self):
+        column_firstname = self.data_access.get_column("tests/ressources/data_access_test.csv", "firstname")
+        self.assertEqual(["Titi", "Tata"], column_firstname)
+        column_lastname = self.data_access.get_column("tests/ressources/data_access_test.csv", "lastname")
+        self.assertEqual(["Toto", "Tutu"], column_lastname)
 
 if __name__ == '__main__':
     unittest.main()

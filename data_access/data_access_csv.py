@@ -20,3 +20,10 @@ class data_access_csv:
             writer = csv.DictWriter(fichier, fieldnames=headers)
             writer.writeheader() 
             writer.writerows(rows)
+
+    def get_column(self, file_location, column):
+        if(column not in self.get_headers(file_location)):
+            print(f"\033[91m Error column name invalid\033[00m")
+        rows = self.get_rows(file_location)
+        result = [d[column] for d in rows]
+        return result

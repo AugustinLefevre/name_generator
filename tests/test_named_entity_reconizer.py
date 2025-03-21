@@ -11,60 +11,39 @@ class test_named_entity_reconizer(unittest.TestCase):
 
         self.ner.parseText(given)
         actualFirstnames = self.ner.getFirstnames()
-        actualLastnames = self.ner.getLastnames()
-        actualLocations = self.ner.getLocations()
 
         self.assertEqual("Emmanuel", actualFirstnames[0])
-        self.assertEqual("Macron", actualLastnames[0])
-        self.assertEqual("la France", actualLocations[0])
 
 
     def testMultipleNames(self):
         given = "Jean-Claude Van Damme et Catherine Deneuve sont célèbres."
         self.ner.parseText(given)
         actualFirstnames = self.ner.getFirstnames()
-        actualLastnames = self.ner.getLastnames()
-        actualLocations = self.ner.getLocations()
 
         self.assertEqual("Jean", actualFirstnames[0])
         self.assertEqual("Claude", actualFirstnames[1])
-        self.assertEqual("Van Damme", actualLastnames[0])
         self.assertEqual("Catherine", actualFirstnames[2])
-        self.assertEqual("Deneuve", actualLastnames[1])
-        self.assertEqual([], actualLocations)
 
 
     def testEntityWithMultipleWords(self):
         given = "Le président des États-Unis, Joe Biden, a donné un discours."
         self.ner.parseText(given)
         actualFirstnames = self.ner.getFirstnames()
-        actualLastnames = self.ner.getLastnames()
-        actualLocations = self.ner.getLocations()
 
         self.assertEqual("Joe", actualFirstnames[0])
-        self.assertEqual("Biden", actualLastnames[0])
-        self.assertEqual("États-Unis", actualLocations[0])
 
     def testWithProblematicWord(self):
         given = "Bonjour Madame"
         self.ner.parseText(given)
         actualFirstnames = self.ner.getFirstnames()
-        actualLastnames = self.ner.getLastnames()
-        actualLocations = self.ner.getLocations()
 
         self.assertEqual(0, len(actualFirstnames))
-        self.assertEqual(0, len(actualLastnames))
-        self.assertEqual(0, len(actualLocations))
 
         given = "Bonjour Monsieur"
         self.ner.parseText(given)
         actualFirstnames = self.ner.getFirstnames()
-        actualLastnames = self.ner.getLastnames()
-        actualLocations = self.ner.getLocations()
 
         self.assertEqual(0, len(actualFirstnames))
-        self.assertEqual(0, len(actualLastnames))
-        self.assertEqual(0, len(actualLocations))
 
     def testisAName(self):
         self.assertTrue(self.ner.is_a_name("Teo", ""))

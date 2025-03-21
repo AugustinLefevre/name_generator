@@ -1,37 +1,24 @@
 import re
 import spacy
-import csv
+from data_access.data_access_csv import data_access_csv
 
 class named_entity_reconizer:
     nlpFr = spacy.load("fr_core_news_lg")
     firstNames = []
-    lastNames = []
-    locations = []
     dict_names = {}
+    data_access = data_access_csv()
     
     excluded_words_file = "ressources/excluded_words.csv"
 
-    excludeds = []
-
-    with open(excluded_words_file, mode="r", newline="", encoding="utf-8") as csvfile:
-            reader = csv.DictReader(csvfile) 
-            for row in reader:
-                if(row["excluded"] != ""):
-                    excludeds.append(row["excluded"])
+    excludeds = data_access.get_column(excluded_words_file, "excluded")
 
     def parseText(self, text) :
         self.firstNames = []
-        self.lastNames = []
-        self.locations = []
         lines = text.splitlines()
         for line in lines:
             docfr = self.nlpFr(line)
-            propn = [token.text for token in docfr if token.pos_ == "PROPN"]
             for entity in docfr.ents :
-                if entity.label_ == "LOC" :
-                    if entity.text not in self.locations:
-                        self.locations.append(entity.text)
-                elif entity.label_ == "PER" : 
+                if entity.label_ == "PER" : 
                     elements = entity.text.split()
                     firstname = elements[0]
                     if (re.match('^[a-zA-Z -]*$', firstname)):
@@ -42,20 +29,9 @@ class named_entity_reconizer:
                                     print("firstname : " + name)
                                     self.firstNames.append(name)
                                     self.dict_names[name] = line
-                        if len(elements) > 1 :
-                            lastnameElements = elements[1:]
-                            lastname = ' '.join(lastnameElements)
-                            if lastname not in self.lastNames and lastname[0].isupper() and len(lastname) > 2 and (re.match('^[a-zA-Z -]*$',lastname)): 
-                                self.lastNames.append(lastname)
     
     def getFirstnames(self) :
         return self.firstNames
-    
-    def getLastnames(self) :
-        return self.lastNames
-    
-    def getLocations(self) :
-        return self.locations
     
     def get_dict_names(self) :
         return self.dict_names
