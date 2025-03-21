@@ -1,4 +1,3 @@
-import csv
 from data_access.data_access_csv import data_access_csv
 
 class NER_CSV_storage :
@@ -21,7 +20,6 @@ class NER_CSV_storage :
                     break
             if not found:
                 firstnames_occurences.append({"firstname" : firstname, "occurrence" : 1, "source" : name_source[firstname]})
-            
 
         self.data_access.overwrite(self.outputFile, firstnames_occurences)
 

@@ -35,3 +35,9 @@ class data_access_csv:
             for row in reader:
                 result[row[key_name]] = row[value_name]
         return result
+    
+    def append(self, file_location, rows):
+        headers = self.get_headers(file_location)
+        with open(file_location, mode="a", newline="", encoding="utf-8") as csvfile:
+            writer = csv.DictWriter(csvfile, fieldnames=headers)
+            writer.writerows(rows)

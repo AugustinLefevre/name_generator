@@ -1,38 +1,25 @@
-import csv
+from data_access.data_access_csv import data_access_csv
+
+data_access = data_access_csv()
 
 excluded_file = "ressources/excluded_words.csv"
 
-excluded = []
-
-with open(excluded_file, mode="r", newline="", encoding="utf-8") as csvfile:
-    reader = csv.DictReader(csvfile) 
-    for row in reader:
-        if(row["excluded"] != ""):
-            excluded.append(row["excluded"])
+excluded = data_access.get_column(excluded_file, "excluded")
 
 firstnames_tmp_file = "target/firstnameOccurrence.csv"
 
-firstnames_tmp = []
-
-with open(firstnames_tmp_file, mode="r", newline="", encoding="utf-8") as csvfile:
-    reader = csv.DictReader(csvfile) 
-    for row in reader:
-        if(row["firstname"] != ""):
-            if(row["firstname"] not in excluded):
-                firstnames_tmp.append(row["firstname"])
+firstnames_tmp = data_access.get_column(firstnames_tmp_file, "firstname")
 
 firstnames_file = "target/firstnames.csv"
 
-firstnames = []
+firstnames = data_access.get_column(firstnames_file, "firstnames")
 
-with open(firstnames_file, mode="r", newline="", encoding="utf-8") as csvfile:
-    reader = csv.DictReader(csvfile) 
-    for row in reader:
-        if(row["firstnames"] != ""):
-                firstnames.append(row["firstnames"])
+excluded.append(firstnames)
 
-with open(firstnames_file, mode="a", newline="", encoding="utf-8") as csvfile:
-    writer = csv.writer(csvfile)
-    for firstname in firstnames_tmp:
-        if(firstname not in firstnames):
-            writer.writerow([firstname])
+result = {}
+
+for firstname in firstnames_tmp:
+    if firstname not in excluded:
+        result.append({"firstnames" : firstname})
+
+data_access.append(firstnames_file, result)

@@ -51,5 +51,24 @@ class test_data_access_csv(unittest.TestCase):
         }
         self.assertEqual(expected, actual)
 
+    def test_append(self):
+        source = "tests/ressources/data_access_test.csv"
+        destination = "tests/ressources/tmp_data_access_test.csv"
+
+        with open(source, "rb") as f_source, open(destination, "wb") as f_dest:
+            contenu = f_source.read()
+            f_dest.write(contenu)
+        given = [{'firstname': 'Tete', 'lastname': 'Tyty'}]
+
+        self.data_access.append(destination, given)
+
+        actuals = self.data_access.get_rows(destination)
+        expected = [{'firstname': 'Titi', 'lastname': 'Toto'},
+                    {'firstname': 'Tata', 'lastname': 'Tutu'}, 
+                    {'firstname': 'Tete', 'lastname': 'Tyty'}]
+        self.assertEqual(expected, actuals)
+
+        os.remove(destination)
+
 if __name__ == '__main__':
     unittest.main()
